@@ -7,7 +7,7 @@ a *even easier* telnet client for command servers
 ### Connect to server:
 
 ```go
-c, err := NewController("<destination>")
+c, err := telnetClient.NewController("<destination>")
 if err != nil {
 	fmt.Println(err)
 }
