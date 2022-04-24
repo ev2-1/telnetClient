@@ -1,8 +1,6 @@
 package telnetClient
 
 import (
-	"fmt"
-
 	"github.com/reiver/go-telnet"
 )
 
