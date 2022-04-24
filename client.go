@@ -4,26 +4,26 @@ import (
 	"github.com/reiver/go-telnet"
 )
 
-type controller struct {
-	conn *telnet.Conn
+type Controller struct {
+	Conn *telnet.Conn
 }
 
-func NewController(dest string) (*controller, error) {
+func NewController(dest string) (*Controller, error) {
 	conn, err := telnet.DialTo(dest)
 	if err != nil {
 		return nil, err
 	}
 
-	return &controller{conn: conn}, nil
+	return &Controller{Conn: conn}, nil
 }
 
-func (c *controller) ReadUntil(b byte) ([]byte, error) {
+func (c *Controller) ReadUntil(b byte) ([]byte, error) {
 	var bytes []byte
 	notFound := true
 
 	for notFound {
 		nbyte := make([]byte, 1)
-		_, err := c.conn.Read(nbyte)
+		_, err := c.Conn.Read(nbyte)
 		if err != nil {
 			return nil, err
 		}
@@ -38,12 +38,12 @@ func (c *controller) ReadUntil(b byte) ([]byte, error) {
 	return bytes, nil
 }
 
-func (c *controller) Write(cmd string) error {
-	_, err := c.conn.Write([]byte(cmd + "\n"))
+func (c *Controller) Write(cmd string) error {
+	_, err := c.Conn.Write([]byte(cmd + "\n"))
 	return err
 }
 
-func (c *controller) Exec(cmd string) (string, error) {
+func (c *Controller) Exec(cmd string) (string, error) {
 	err := c.Write(cmd)
 	if err != nil {
 		return "", err
@@ -57,6 +57,6 @@ func (c *controller) Exec(cmd string) (string, error) {
 	return string(bytes), nil
 }
 
-func (c *controller) Close() error {
-	return c.conn.Close()
+func (c *Controller) Close() error {
+	return c.Conn.Close()
 }
