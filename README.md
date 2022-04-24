@@ -1,6 +1,6 @@
 # telnetClient
 
-a **even easier** telnet client for command servers
+a *even easier* telnet client for command servers
 
 [pkg.go.dev](//pkg.go.dev/github.com/ev2-1/telnetClient)
 
