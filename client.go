@@ -43,18 +43,18 @@ func (c *Controller) Write(cmd string) error {
 	return err
 }
 
-func (c *Controller) Exec(cmd string) (string, error) {
+func (c *Controller) Exec(cmd string) ([]string, error) {
 	err := c.Write(cmd)
 	if err != nil {
-		return "", err
+		return make([]string, 0), err
 	}
 
 	bytes, err := c.ReadUntil('\n')
 	if err != nil {
-		return "", err
+		return make([]string, 0), err
 	}
 
-	return string(bytes), nil
+	return ParseResponse(string(bytes))
 }
 
 func (c *Controller) Close() error {
