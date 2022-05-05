@@ -1,13 +1,13 @@
 package telnetClient
 
 import (
-	"strings"
 	"errors"
+	"strings"
 )
 
 func ParseResponse(res string) ([]string, error) {
 	r := strings.Split(res, ", ")
-	if( r[0] == "err" ) {
+	if r[0] == "err" {
 		return make([]string, 0), errors.New("Response from server: " + strings.Join(r[1:], ", "))
 	}
 

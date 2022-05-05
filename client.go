@@ -5,7 +5,24 @@ import (
 )
 
 type Controller struct {
-	Conn *telnet.Conn
+	Conn           *telnet.Conn
+	ResponseStream chan string
+}
+
+func NewReciveController(dest, selftype string) (*Controller, error) {
+	conn, err := telnet.DialTo(dest)
+	if err != nil {
+		return nil, err
+	}
+
+	c := &Controller{
+		Conn:           conn,
+		ResponseStream: make(chan string),
+	}
+
+	c.Write(selftype)
+
+	return c, nil
 }
 
 func NewController(dest string) (*Controller, error) {
@@ -14,7 +31,10 @@ func NewController(dest string) (*Controller, error) {
 		return nil, err
 	}
 
-	return &Controller{Conn: conn}, nil
+	return &Controller{
+		Conn:           conn,
+		ResponseStream: make(chan string),
+	}, nil
 }
 
 func (c *Controller) ReadUntil(b byte) ([]byte, error) {
@@ -55,6 +75,19 @@ func (c *Controller) Exec(cmd string) ([]string, error) {
 	}
 
 	return ParseResponse(string(bytes))
+}
+
+func (c *Controller) ReadToChannel(b byte) {
+	go func() {
+		for {
+			res, err := c.ReadUntil(b)
+			if err != nil {
+				continue
+			} else {
+				c.ResponseStream <- string(res)
+			}
+		}
+	}()
 }
 
 func (c *Controller) Close() error {
