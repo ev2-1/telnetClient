@@ -26,11 +26,7 @@ func NewReciveController(dest, selftype string) (*Controller, error) {
 	c.Write(selftype)
 
 	// read:
-	go func() {
-		for {
-			c.ReadToChannel('\n')
-		}
-	}()
+	c.ReadToChannel('\n')
 
 	return c, nil
 }
