@@ -5,6 +5,7 @@ import (
 	"strings"
 )
 
+// parses string response
 func ParseResponse(res string) ([]string, error) {
 	r := strings.Split(res, ", ")
 	if r[0] == "err" {
